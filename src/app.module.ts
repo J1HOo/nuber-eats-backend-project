@@ -6,7 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { RestaurantResolver } from './restaurants/restaurants.resolver';
-import { Restaurant } from './restaurants/entities/restauranst.entity';
+import { Restaurant } from './restaurants/entities/restaurant.entity';
+
 
 
 @Module({

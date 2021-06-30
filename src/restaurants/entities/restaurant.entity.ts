@@ -1,14 +1,12 @@
-import { ArgsType, Field, InputType, ObjectType } from "@nestjs/graphql";
-import { IsBoolean, IsString, Length } from "class-validator";
-import { Column, PrimaryGeneratedColumn } from "typeorm";
-
+import { Field, ObjectType } from "@nestjs/graphql";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 @ObjectType()
+@Entity()
 export class Restaurant {
     @Field(type => Number)
     @PrimaryGeneratedColumn()
-    @Column()
     id: Number;
 
     @Field(type => String)
