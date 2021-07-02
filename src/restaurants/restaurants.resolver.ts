@@ -7,17 +7,13 @@ import { RestaurantService } from "./restaurants.service";
 
 @Resolver(of => Restaurant)
 export class RestaurantResolver {
-  constructor(private readonly restaurantService: RestaurantService) {
-
-  }
+  constructor(private readonly restaurantService: RestaurantService) {}
   @Query(returns => [Restaurant])
   restaurants(): Promise <Restaurant[]> {
     return this.restaurantService.getAll();
   }
 @Mutation(returns => Boolean)
-createRestaurants(
-  @Args() creatRestaurantDto: CreateRestaurantDto
-  ): Boolean {
+createRestaurants(@Args() creatRestaurantDto: CreateRestaurantDto): Boolean {
       return true;
     }
   }
