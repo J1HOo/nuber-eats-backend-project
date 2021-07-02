@@ -37,7 +37,7 @@ import { User } from './users/entities/user.entity';
       port: +process.env.DB_PORT,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      name: process.env.DB_NAME,
+      database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== "prod",
       logging: true,
       entities: [User],
