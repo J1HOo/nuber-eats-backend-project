@@ -33,7 +33,6 @@ export class User extends CoreEntity{
     @IsEnum(UserRole)
     role: UserRole;
 
-
     @BeforeInsert()
     async hashPassword(): Promise<void> {
         try{
@@ -41,6 +40,16 @@ export class User extends CoreEntity{
         }catch(e){
             console.error(e);
             throw new InternalServerErrorException()            
+        }
+    }
+
+    async cheakPassword(aPassword: string): Promise<boolean> {
+        try {
+           const ok = await bcrypt.compare(aPassword, this.password);
+           return ok;
+        } catch(e) {
+            console.error(e);
+            throw new InternalServerErrorException()
         }
     }
 }
