@@ -11,11 +11,8 @@ import { JwtService } from "src/jwt/jwt.service";
 @Injectable()
 export class UserService{
     constructor(@InjectRepository(User) private readonly users: Repository<User>,
-    private readonly config: ConfigService,
     private readonly jwtService: JwtService,
-    ) {
-        this.jwtService.hello();
-    }
+    ) {}
 
     async createAccount({email, password, role}: CreateAccountInput): Promise<{ ok: boolean; error?: string }> {
         try{
@@ -40,10 +37,10 @@ export class UserService{
             if (!passwordCorrect) {
                 return { ok: false, error: '잘못된 패스워드입니다.' };
             }
-            const token = jwt.sign({id: user.id}, this.config.get( 'SECRET_KEY' ));
-            return { ok:true, token };
+            const token = this.jwtService.sign(user.id);
+            return { ok: true, token, };
         } catch (error) {
-            return { ok:false, error, };
+            return { ok: false, error, };
         }
     } 
 }
