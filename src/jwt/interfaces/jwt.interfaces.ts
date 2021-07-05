@@ -1,4 +1,4 @@
 
-export interface JwpModuleOptions {
+export interface JwtModuleOptions {
     privateKey: string;
-}
+  }
