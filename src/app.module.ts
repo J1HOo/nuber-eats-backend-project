@@ -1,17 +1,15 @@
-import { Module, Query } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, Query, RequestMethod } from '@nestjs/common';
 import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { RestaurantsModule } from './restaurants/restaurants.module';
-import { RestaurantResolver } from './restaurants/restaurants.resolver';
-import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
 import { JwtService } from './jwt/jwt.service';
 import { JwtModule } from './jwt/jwt.module';
+import { jwtMiddleware } from './jwt/jwt.middleware';
 
 
 
