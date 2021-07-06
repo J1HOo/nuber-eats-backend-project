@@ -7,6 +7,8 @@ import { User } from "./entities/user.entity";
 import { UserService } from "./users.service";
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
+import { EditProfileInput, EditProfileOutput } from "./dtos/edit-profile.dto";
+
 
 @Resolver(of => User)
 export class UserResolver{
@@ -38,9 +40,7 @@ export class UserResolver{
       }
       @UseGuards(AuthGuard)
       @Query(returns => UserProfileOutput)
-      async userProfile(
-        @Args() userProfileInput: UserProfileInput,
-      ): Promise<UserProfileOutput> {
+      async userProfile(@Args() userProfileInput: UserProfileInput): Promise<UserProfileOutput> {
         try {
           const user = await this.usersService.findById(userProfileInput.userId);
           if (!user) {
@@ -49,6 +49,15 @@ export class UserResolver{
           return { ok: true, user };
         } catch (e) {
           return { error: '유저를 찾을 수 없습니다.', ok: false, };
+        }
+      }
+      @UseGuards(AuthGuard)
+      @Mutation(returns => EditProfileOutput)
+      async editProfile(@AuthUser() authUser: User, @Args('input') editProfileInput: EditProfileInput): Promise<EditProfileOutput> {
+        try {
+          await this.usersService.editProfile(authUser.id, editProfileInput);
+        } catch (error) {
+          return { ok: false, error };
         }
       }
     }
