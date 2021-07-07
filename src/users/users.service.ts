@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
+import { VerifyEmailOutput } from './dtos/verify-email.dto';
 import { UserProfileOutput } from './dtos/user-profile.dto';
 
 @Injectable()
@@ -76,18 +77,19 @@ export class UserService{
         await this.users.save(user);
         return { ok: true };
       } catch (error) {
-        return { ok: false, error: '프로필을 업데이트 하지 못하였습니다.' };
+        return { ok: false, error: '프로필을 업데이트하지 못했습니다.' };
       }
     }
 
-      async verifyEmail(code: string): Promise<Verification> {
+      async verifyEmail(code: string): Promise<VerifyEmailOutput> {
         try {
           const verification = await this.verifications.findOne(
             { code },
             { relations: ['user'] });
           if (verification) {
             verification.user.verified = true;
-            this.users.save(verification.user);
+            await this.users.save(verification.user);
+            await this.verifications.delete(verification.id);
             return { ok: true };
           }
           return { ok: false, error: 'Verification not found.' };
