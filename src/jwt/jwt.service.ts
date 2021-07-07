@@ -10,6 +10,7 @@ export class JwtService {
      console.log(options); 
     }
     sign( userId:Number): string {
+      console.log(userId);
         return jwt.sign({ id: userId }, this.options.privateKey);
     }
     verify(token: string) {
