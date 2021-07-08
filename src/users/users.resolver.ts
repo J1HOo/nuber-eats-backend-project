@@ -9,7 +9,6 @@ import { AuthUser } from 'src/auth/auth-user.decorator';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { EditProfileInput, EditProfileOutput } from "./dtos/edit-profile.dto";
 import { VerifyEmailOutput, VerifyEmailInput } from "./dtos/verify-email.dto";
-import { number } from "joi";
 
 
 @Resolver(of => User)

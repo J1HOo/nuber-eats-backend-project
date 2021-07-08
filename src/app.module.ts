@@ -28,7 +28,9 @@ import { MailModule } from './mail/mail.module';
       DB_PASSWORD: Joi.string().required(),
       DB_NAME: Joi.string().required(),
       PRIVATE_KEY: Joi.string().required(),
-      
+      MAILGUN_API_KEY: Joi.string().required(),
+      MAILGUN_DOMAIN_NAME: Joi.string().required(),
+      MAILGUN_FROM_EMAIL: Joi.string().required(),
       })
     }),
     TypeOrmModule.forRoot({
