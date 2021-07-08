@@ -9,6 +9,7 @@ import { AuthUser } from 'src/auth/auth-user.decorator';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { EditProfileInput, EditProfileOutput } from "./dtos/edit-profile.dto";
 import { VerifyEmailOutput, VerifyEmailInput } from "./dtos/verify-email.dto";
+import { number } from "joi";
 
 
 @Resolver(of => User)
@@ -40,7 +41,7 @@ export class UserResolver{
       @Mutation(returns => EditProfileOutput)
       @UseGuards(AuthGuard)
       async editProfile(@AuthUser() authUser: User, @Args('input') editProfileInput: EditProfileInput): Promise<EditProfileOutput> {
-        return this.usersService.editProfile(authUser.id, editProfileInput);
+        return this.usersService.editProfile(authUser.id as number, editProfileInput);
       }
 
     @Mutation(returns => VerifyEmailOutput)
