@@ -60,6 +60,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
     domain: process.env.MAILGUN_DOMAIN_NAME,
     fromEmail: process.env.MAILGUN_FROM_EMAIL,
   }),
+  AuthModule,
   UsersModule,
   RestaurantsModule,
 ],
