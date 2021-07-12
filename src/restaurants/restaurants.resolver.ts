@@ -24,9 +24,9 @@ import { RestaurantService } from './restaurants.service';
   @Mutation(returns => EditRestaurantOutput)
   @Role(['Owner'])
   editRestaurant(
-    @AuthUser() authUser: User,
+    @AuthUser() owner: User,
     @Args('input') editRestaurantInput: EditRestaurantInput,
-  ): EditRestaurantOutput {
-    return { ok: true };
+    ): Promise<EditRestaurantOutput> {
+      return this.restaurantService.editRestaurant(owner, editRestaurantInput);
   }
 }
