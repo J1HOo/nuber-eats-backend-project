@@ -9,6 +9,7 @@ import { EditRestaurantInput, EditRestaurantOutput } from './dtos/edit-restauran
 import { Category } from './entities/cetegory.entity';
 import { Restaurant } from './entities/restaurant.entity';
 import { CategoryRepository } from './repositories/category.repository';
+import { CategoryInput, CategoryOutput } from './dtos/category.dto';
 
 export class RestaurantService {
   constructor(
@@ -95,5 +96,19 @@ export class RestaurantService {
   }
   countRestaurants(category: Category) {
     return this.restaurants.count({ category });
+  }
+  async findCategoryBySlug({ slug }: CategoryInput): Promise<CategoryOutput> {
+    try {
+      const category = await this.categories.findOne(
+        { slug },
+        { relations: ['restaurants'] },
+      );
+      if (!category) {
+        return { ok: false, error: 'Category not found', };
+      }
+      return { ok: true, category, };
+    } catch {
+      return { ok: false, error: 'Could not load category', };
+    }
   }
 }
