@@ -36,20 +36,20 @@ import { IsEnum, IsNumber } from 'class-validator';
     )
     driver?: User;
   
-    @Field(type => Restaurant)
+    @Field(type => Restaurant, { nullable: true })
     @ManyToOne(
       type => Restaurant,
       restaurant => restaurant.orders,
       { onDelete: 'SET NULL', nullable: true },
     )
-    restaurant: Restaurant;
+    restaurant?: Restaurant;
   
     @Field(type => [OrderItem])
     @ManyToMany(type => OrderItem)
     @JoinTable()
     items: OrderItem[];
   
-    @Column({ nullable: true })
+    @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.Pending })
     @Field(type => Float, { nullable: true })
     @IsNumber()
     total?: number;
