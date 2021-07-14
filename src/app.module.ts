@@ -47,7 +47,7 @@ import { OrdersModule } from './orders/orders.module';
       synchronize: process.env.NODE_ENV !== "prod",
       logging:
       process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [User, Verification, Restaurant, Category, Dish, Order],
+      entities: [ User, Verification, Restaurant, Category, Dish, Order,OrderItem,],
     }),
     GraphQLModule.forRoot({
     autoSchemaFile: true,
