@@ -16,6 +16,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 import { Dish } from './restaurants/entities/dish.entity';
 import { Order } from './orders/entities/order.entity';
 import { OrdersModule } from './orders/orders.module';
+import { OrderItem } from './orders/entities/order-item.entity';
 
 
 @Module({
