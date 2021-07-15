@@ -10,8 +10,10 @@ import { IsEnum, IsNumber } from 'class-validator';
   export enum OrderStatus {
     Pending = 'Pending',
     Cooking = 'Cooking',
+    Cooked = 'Cooked',
     PickedUp = 'PickedUp',
     Delivered = 'Delivered',
+    
   }
   
   registerEnumType(OrderStatus, { name: 'OrderStatus' });
