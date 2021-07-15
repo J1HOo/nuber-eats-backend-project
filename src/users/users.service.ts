@@ -43,7 +43,7 @@ export class UserService{
             if (!user) {
                 return { ok: false, error: '유저를 찾을 수 없습니다.' };
             }
-            const passwordCorrect = await user.cheakPassword(password);
+            const passwordCorrect = await user.checkPassword(password);
             if (!passwordCorrect) {
                 return { ok: false, error: '잘못된 패스워드입니다.' };
             }
