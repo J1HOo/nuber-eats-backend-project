@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PubSub } from 'graphql-subscriptions';
+import { NEW_PENDING_ORDER, PUB_SUB } from 'src/common/common.constants';
 import { Dish } from 'src/restaurants/entities/dish.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
-import { User,UserRole } from 'src/users/entities/user.entity';
+import { User, UserRole } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
+import { EditOrderInput, EditOrderOutput } from './dtos/edit-order.dto';
+import { GetOrderInput, GetOrderOutput } from './dtos/get-order.dto';
+import { GetOrdersInput, GetOrdersOutput } from './dtos/get-orders.dto';
 import { OrderItem } from './entities/order-item.entity';
 import { Order, OrderStatus } from './entities/order.entity';
-import { GetOrdersInput, GetOrdersOutput } from './dtos/get-orders.dto';
-import { GetOrderInput, GetOrderOutput } from './dtos/get-order.dto';
-import { EditOrderInput, EditOrderOutput } from './dtos/edit-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -22,6 +24,7 @@ export class OrderService {
     private readonly restaurants: Repository<Restaurant>,
     @InjectRepository(Dish)
     private readonly dishes: Repository<Dish>,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub,
   ) {}
 
   async crateOrder(
@@ -70,7 +73,7 @@ export class OrderService {
           );
           orderItems.push(orderItem);
         }
-        await this.orders.save(
+        const order = await this.orders.save(
           this.orders.create({
             customer,
             restaurant,
@@ -78,6 +81,7 @@ export class OrderService {
             items: orderItems,
           }),
         );
+        await this.pubSub.publish(NEW_PENDING_ORDER, { pendingOrders: order });
         return { ok: true, };
       } catch {
         return { ok: false, error: 'Could not create order.', };
