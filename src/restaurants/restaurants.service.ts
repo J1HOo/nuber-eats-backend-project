@@ -121,6 +121,7 @@ export class RestaurantService {
         where: {
           category,
         },
+        order: { isPromoted: 'DESC', },
         take: 25,
         skip: (page - 1) * 25,
       });
@@ -136,6 +137,7 @@ export class RestaurantService {
       const [restaurants, totalResults] = await this.restaurants.findAndCount({
         skip: (page - 1) * 25,
         take: 25,
+        order: { isPromoted: 'DESC', },
       });
       return {
         ok: true,
@@ -156,20 +158,11 @@ export class RestaurantService {
         relations: ['menu'],
       });
       if (!restaurant) {
-        return {
-          ok: false,
-          error: 'Restaurant not found',
-        };
+        return { ok: false, error: 'Restaurant not found', };
       }
-      return {
-        ok: true,
-        restaurant,
-      };
+      return { ok: true, restaurant, };
     } catch {
-      return {
-        ok: false,
-        error: 'Could not find restaurant',
-      };
+      return { ok: false, error: 'Could not find restaurant', };
     }
   }
 
@@ -231,16 +224,10 @@ export class RestaurantService {
         relations: ['restaurant'],
       });
       if (!dish) {
-        return {
-          ok: false,
-          error: 'Dish not found',
-        };
+        return { ok: false, error: 'Dish not found', };
       }
       if (dish.restaurant.ownerId !== owner.id) {
-        return {
-          ok: false,
-          error: "You can't do that.",
-        };
+        return { ok: false, error: "You can't do that.", };
       }
       await this.dishes.save([
         {
@@ -248,14 +235,9 @@ export class RestaurantService {
           ...editDishInput,
         },
       ]);
-      return {
-        ok: true,
-      };
+      return { ok: true, };
     } catch {
-      return {
-        ok: false,
-        error: 'Could not delete dish',
-      };
+      return { ok: false, error: 'Could not delete dish', };
     }
   }
 
