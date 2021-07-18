@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 import got from 'got';
+import * as FormData from 'form-data';
 import { CONFIG_OPTIONS } from 'src/common/common.constants';
 import { MailService } from './mail.service';
 
@@ -17,7 +18,11 @@ describe('MailService', () => {
         MailService,
         {
           provide: CONFIG_OPTIONS,
-          useValue: { apiKey: 'test-apiKey', domain: 'TEST_DOMAIN', fromEmail: 'test-fromEmail',},
+          useValue: {
+            apiKey: 'test-apiKey',
+            domain: TEST_DOMAIN,
+            fromEmail: 'test-fromEmail',
+          },
         },
       ],
     }).compile();
@@ -27,9 +32,13 @@ describe('MailService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
   describe('sendVerificationEmail', () => {
     it('should call sendEmail', () => {
-      const sendVerificationEmailArgs = { email: 'email', code: 'code',};
+      const sendVerificationEmailArgs = {
+        email: 'email',
+        code: 'code',
+      };
       jest.spyOn(service, 'sendEmail').mockImplementation(async () => true);
       service.sendVerificationEmail(
         sendVerificationEmailArgs.email,

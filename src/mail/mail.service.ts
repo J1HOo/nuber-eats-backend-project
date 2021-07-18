@@ -7,12 +7,20 @@ import { EmailVar, MailModuleOptions } from './mail.interfaces';
 @Injectable()
 export class MailService {
   constructor(
-    @Inject(CONFIG_OPTIONS) private readonly options: MailModuleOptions,) {}
-    
-    async sendEmail(subject: string, template: string, emailVars: EmailVar[], ): Promise<boolean> {
+    @Inject(CONFIG_OPTIONS) private readonly options: MailModuleOptions,
+  ) {}
+
+  async sendEmail(
+    subject: string,
+    template: string,
+    emailVars: EmailVar[],
+  ): Promise<boolean> {
     const form = new FormData();
-    form.append('from', `Nico from Nuber Eats <mailgun@${this.options.domain}>`,);
-    form.append('to', `nico@nomadcoders.co`);
+    form.append(
+      'from',
+      `jiho from Nuber Eats <mailgun@${this.options.domain}>`,
+    );
+    form.append('to', `businessj1ho@gmail.com`);
     form.append('subject', subject);
     form.append('template', template);
     emailVars.forEach(eVar => form.append(`v:${eVar.key}`, eVar.value));
@@ -32,12 +40,12 @@ export class MailService {
     } catch (error) {
       return false;
     }
-}
+  }
 
-    sendVerificationEmail(email: string, code: string) {
-        this.sendEmail('Verify Your Email', 'verify-email', [
-            { key: 'code', value: code },
-            { key: 'username', value: email },
-        ]);
-    }
+  sendVerificationEmail(email: string, code: string) {
+    this.sendEmail('Verify Your Email', 'verify-email', [
+      { key: 'code', value: code },
+      { key: 'username', value: email },
+    ]);
+  }
 }

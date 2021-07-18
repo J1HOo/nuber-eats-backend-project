@@ -168,7 +168,7 @@ export class OrderService {
     try {
       const order = await this.orders.findOne(orderId as number);
       if (!order) {
-        return { ok: false, error: '주문을 불러오지 못했습니다.' };
+        return { ok: false, error: '주문을 찾을 수 없습니다.' };
       }
       if (!this.canSeeOrder(user, order)) {
         return { ok: false, error: '그 것을 볼 수 없습니다.' };

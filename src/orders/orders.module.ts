@@ -9,6 +9,5 @@ import { OrderService } from './orders.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Order, Restaurant, OrderItem, Dish])],
-    providers: [OrderService, OrderResolver],
-  })
+    providers: [OrderService, OrderResolver], })
 export class OrdersModule {}
