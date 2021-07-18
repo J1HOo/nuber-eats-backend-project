@@ -36,14 +36,14 @@ export class OrderService {
     try {
       const restaurant = await this.restaurants.findOne(restaurantId);
       if (!restaurant) {
-        return { ok: false, error: 'Restaurant not found', };
+        return { ok: false, error: '레스토랑을 찾을 수 없습니다.' };
       }
       let orderFinalPrice = 0;
       const orderItems: OrderItem[] = [];
       for (const item of items) {
         const dish = await this.dishes.findOne(item.dishId);
         if (!dish) {
-          return { ok: false, error: 'Dish not found.', };
+          return { ok: false, error: '메뉴를 찾을 수 없습니다.' };
         }
         let dishFinalPrice = dish.price;
         for (const itemOption of item.options) {
@@ -85,7 +85,7 @@ export class OrderService {
         await this.pubSub.publish(NEW_PENDING_ORDER, { pendingOrders: { order, ownerId: restaurant.ownerId },});
         return { ok: true, };
       } catch {
-        return { ok: false, error: 'Could not create order.', };
+        return { ok: false, error: '주문을 할 수 없는 상태입니다.' };
       }
     }
   async getOrders(
@@ -122,7 +122,7 @@ export class OrderService {
       }
       return { ok: true, orders, };
     } catch {
-      return { ok: false, error: 'Could not get orders', };
+      return { ok: false, error: '주문을 받을 수 없는 상태 입니다.' };
     }
   }
   
@@ -149,15 +149,15 @@ export class OrderService {
         relations: ['restaurant'],
       });
       if (!order) {
-        return { ok: false,  error: 'Order not found.', };
+        return { ok: false,  error: '주문을 찾을 수 없습니다.' };
       }
 
       if (!this.canSeeOrder(user, order)) {
-        return { ok: false, error: 'You cant see that', };
+        return { ok: false, error: '그 것을 볼 수 없습니다.' };
       }
       return { ok: true, order, };
     } catch {
-      return { ok: false, error: 'Could not load order.', };
+      return { ok: false, error: '주문을 불러오지 못했습니다.' };
     }
   }
 
@@ -168,16 +168,10 @@ export class OrderService {
     try {
       const order = await this.orders.findOne(orderId as number);
       if (!order) {
-        return {
-          ok: false,
-          error: 'Order not found.',
-        };
+        return { ok: false, error: '주문을 불러오지 못했습니다.' };
       }
       if (!this.canSeeOrder(user, order)) {
-        return {
-          ok: false,
-          error: "Can't see this.",
-        };
+        return { ok: false, error: '그 것을 볼 수 없습니다.' };
       }
       let canEdit = true;
       if (user.role === UserRole.Client) {
@@ -197,7 +191,7 @@ export class OrderService {
         }
       }
       if (!canEdit) {
-        return { ok: false, error: "You can't do that.", };
+        return { ok: false, error: '그 것을 할 수 없습니다.' };
       }
       await this.orders.save({
         id: orderId,
@@ -214,7 +208,7 @@ export class OrderService {
       await this.pubSub.publish(NEW_ORDER_UPDATE, { orderUpdates: newOrder });
       return { ok: true, };
     } catch {
-      return { ok: false, error: 'Could not edit order.', };
+      return { ok: false, error: '주문을 수정 할 수 없습니다.' };
     }
   }
 
@@ -225,10 +219,10 @@ export class OrderService {
     try {
       const order = await this.orders.findOne(orderId as number);
       if (!order) {
-        return { ok: false, error: 'Order not found', };
+        return { ok: false, error: '주문을 찾을 수 없습니다.' };
       }
       if (order.driver) {
-        return { ok: false, error: 'This order already has a driver', };
+        return { ok: false, error: '이 주문은 이미 배달원이 지정되었습니다.' };
       }
       await this.orders.save({
         id: orderId,
@@ -239,7 +233,7 @@ export class OrderService {
       });
       return { ok: true, };
     } catch {
-      return { ok: false, error: 'Could not upate order.', };
+      return { ok: false, error: '주문을 업데이트 하지 못했습니다.' };
     }
   }
 }
