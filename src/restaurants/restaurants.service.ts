@@ -17,6 +17,7 @@ import { CreateDishInput, CreateDishOutput } from './dtos/create-dish.dto';
 import { Dish } from './entities/dish.entity';
 import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
 import { EditDishInput, EditDishOutput } from './dtos/edit-dish.dto';
+import { MyRestaurantsOutput } from './dtos/my-restaurants.dto';
 
 @Injectable()
 export class RestaurantService {
@@ -122,8 +123,8 @@ export class RestaurantService {
           category,
         },
         order: { isPromoted: 'DESC', },
-        take: 25,
-        skip: (page - 1) * 25,
+        skip: (page - 1) * 3,
+        take: 3,
       });
       const totalResults = await this.countRestaurants(category);
       return { ok: true, restaurants, category, totalPages: Math.ceil(totalResults / 25), };
@@ -142,7 +143,7 @@ export class RestaurantService {
       return {
         ok: true,
         results: restaurants,
-        totalPages: Math.ceil(totalResults / 25),
+        totalPages: Math.ceil(totalResults / 3),
         totalResults,
       };
     } catch {
@@ -259,6 +260,20 @@ export class RestaurantService {
       return { ok: true, };
     } catch {
       return { ok: false, error: 'Could not delete dish', };
+    }
+  }
+  async myRestaurants(owner: User): Promise<MyRestaurantsOutput> {
+    try {
+      const restaurants = await this.restaurants.find({ owner });
+      return {
+        restaurants,
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not find restaurants.',
+      };
     }
   }
 }
